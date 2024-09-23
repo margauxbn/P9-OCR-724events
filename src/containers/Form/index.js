@@ -14,19 +14,19 @@ const Form = ({ onSuccess, onError }) => {
     async (evt) => {
       evt.preventDefault();
       setSending(true);
-      // We try to call mockContactApi
       try {
         await mockContactApi();
-        setSuccessMessage("Message envoyé !");
-        setSending(false);
+        setSuccessMessage();
         onSuccess();
       } catch (err) {
-        setSending(false);
         onError(err);
+      } finally {
+        setSending(false);
       }
     },
     [onSuccess, onError]
   );
+
   return (
     <form onSubmit={sendContact}>
       <div className="row">
@@ -47,16 +47,13 @@ const Form = ({ onSuccess, onError }) => {
           {successMessage && <div>{successMessage}</div>}
         </div>
         <div className="col">
-          <Field
-            placeholder="message"
-            label="Message"
-            type={FIELD_TYPES.TEXTAREA}
-          />
+          <Field placeholder="message" label="Message" type={FIELD_TYPES.TEXTAREA} />
         </div>
       </div>
     </form>
   );
 };
+
 
 Form.propTypes = {
   onError: PropTypes.func,
