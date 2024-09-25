@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useState,
-  useMemo, // Import du hook useMemo
+  useMemo,
 } from "react";
 
 const DataContext = createContext({});
@@ -20,21 +20,20 @@ export const api = {
 export const DataProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
-  const [last, setLast] = useState(null); // État pour stocker l'événement "last"
+  const [last, setLast] = useState(null); 
 
   const getData = useCallback(async () => {
     try {
       const result = await api.loadData();
       setData(result);
 
-      // Supposons que "events" est un tableau trié par date descendante dans le JSON
       if (result && result.events && result.events.length > 0) {
         const lastEvent = result.events.reduce((latest, currentEvent) => {
           const currentDate = new Date(currentEvent.date);
           return currentDate > new Date(latest.date) ? currentEvent : latest;
         }, result.events[0]);
 
-        setLast(lastEvent); // Met à jour le dernier événement
+        setLast(lastEvent);
       }
 
     } catch (err) {
@@ -47,12 +46,11 @@ export const DataProvider = ({ children }) => {
     getData();
   }, [data, getData]);
 
-  // Utilisation de useMemo pour mémoriser l'objet value
   const value = useMemo(() => ({
     data,
     last,
     error,
-  }), [data, last, error]); // Mémorisation des dépendances
+  }), [data, last, error]);
 
   return (
     <DataContext.Provider value={value}>
