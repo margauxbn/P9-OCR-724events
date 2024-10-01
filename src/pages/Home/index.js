@@ -123,7 +123,7 @@ const Page = () => {
             date={new Date(last?.date)}
             small
             label={last?.type}
-          />
+          />  
         ) : (
           <p>Aucune image disponible pour le dernier événement.</p>
         )}
